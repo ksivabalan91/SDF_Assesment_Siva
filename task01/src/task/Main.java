@@ -18,10 +18,12 @@ public class Main {
 
         List<String> data = new LinkedList<>();
         List<String> wordsList = new LinkedList<>();
-        List<Double> wordCount = new LinkedList<>();
+        List<Double> wordFreq = new LinkedList<>();
         String filename = "cat_in_the_hat.txt";
-        Set<String> words = new HashSet<>();
+        Set<String> wordSet = new HashSet<>();
         Map<String,Double> wordCountMap = new HashMap<>();
+
+        List<Words> words = new ArrayList<>();
 
 
         if(args.length>0){filename = args[0];}
@@ -29,10 +31,10 @@ public class Main {
         // read file and store in string list
         data = readFile(filename);
         // remove duplicates
-        for(String i : data){words.add(i);} 
+        for(String i : data){wordSet.add(i);} 
     
 
-        for(String i: words){
+        for(String i: wordSet){
             int counter =0;
             for(String j : data){
                 if(i.equals(j)){
@@ -41,17 +43,36 @@ public class Main {
             }
             double freq = ((double) counter) / ((double)data.size());
             wordsList.add(i);
-            wordCount.add(freq);
+            wordFreq.add(freq);
             wordCountMap.put(i, freq);
+            Words key = new Words(i, freq);
+            words.add(key);
         }    
-        System.out.println(wordsList);
-        System.out.println(wordCount);
 
-        List<Map.Entry<String,Double>> list = new ArrayList<>(wordCountMap.entrySet());
+        // for (Words i : words){
+        //     System.out.println(i.toString());
+        // }
 
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+        words.sort(Comparator.comparing(e->e.getFreq()));
+
+        for(int i=0; i<10;i++){
+            System.out.printf("%d. "+words.get(i).getKey()+" %.4f\n",i+1,words.get(i).getFreq());
+        }
+
+        // for (Words i : words){
+        //     System.out.println(i.toString());
+        // }
+
+
+        // System.out.println(wordsList);
+        // System.out.println(wordFreq);
+
+
+        // List<Map.Entry<String,Double>> list = new ArrayList<>(wordCountMap.entrySet());
+
+        // Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
             
-        })
+        // })
 
 
         // System.out.println(wordCountMap.toString());
