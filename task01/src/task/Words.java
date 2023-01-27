@@ -24,9 +24,4 @@ public class Words implements Comparable<Words>{
     public int compareTo(Words o){
         return this.getKey().compareTo(o.getKey());
     }
-
-    
-
-
-    
 }
