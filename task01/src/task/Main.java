@@ -4,27 +4,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException{
 
         List<String> data = new LinkedList<>();
-        List<String> wordsList = new LinkedList<>();
-        List<Double> wordFreq = new LinkedList<>();
         String filename = "cat_in_the_hat.txt";
         Set<String> wordSet = new HashSet<>();
-        Map<String,Double> wordCountMap = new HashMap<>();
-
         List<Words> words = new ArrayList<>();
-
 
         if(args.length>0){filename = args[0];}
 
@@ -32,7 +24,6 @@ public class Main {
         data = readFile(filename);
         // remove duplicates
         for(String i : data){wordSet.add(i);} 
-    
 
         for(String i: wordSet){
             int counter =0;
@@ -42,42 +33,15 @@ public class Main {
                 }
             }
             double freq = ((double) counter) / ((double)data.size());
-            wordsList.add(i);
-            wordFreq.add(freq);
-            wordCountMap.put(i, freq);
             Words key = new Words(i, freq);
             words.add(key);
         }    
 
-        // for (Words i : words){
-        //     System.out.println(i.toString());
-        // }
-
         words.sort(Comparator.comparing(e->e.getFreq()));
 
-        for(int i=0; i<10;i++){
-            System.out.printf("%d. "+words.get(i).getKey()+" %.4f\n",i+1,words.get(i).getFreq());
+        for(int i=0,j=words.size(); i<10;i++,j--){
+            System.out.printf("%d. "+words.get(j-1).getKey()+"\t %.4f\n",i+1,words.get(j-1).getFreq());
         }
-
-        // for (Words i : words){
-        //     System.out.println(i.toString());
-        // }
-
-
-        // System.out.println(wordsList);
-        // System.out.println(wordFreq);
-
-
-        // List<Map.Entry<String,Double>> list = new ArrayList<>(wordCountMap.entrySet());
-
-        // Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            
-        // })
-
-
-        // System.out.println(wordCountMap.toString());
-        // System.out.println(words.toString());
-
         
     }
 
@@ -92,14 +56,19 @@ public class Main {
 
         while((line=br.readLine())!=null){
             String lineArr[];
-            // line = line.replace("\uFEFF", "");
-            line = line.replace("?", " ");
             line = line.replace(".", " ");
             line = line.replace(",", " ");
-            line = line.replace("'", " ");
-            line = line.replace("!", " ");
+            line = line.replace(":", " ");
             line = line.replace(";", " ");
+            line = line.replace("!", " ");
+            line = line.replace("?", " ");
             line = line.replace("-", " ");
+            line = line.replace("(", " ");
+            line = line.replace(")", " ");
+            line = line.replace("{", " ");
+            line = line.replace("}", " ");
+            line = line.replace("'", " ");
+            line = line.replace("\"", " ");
             lineArr = line.split(" ",0);
 
             for(String i: lineArr){
@@ -115,12 +84,9 @@ public class Main {
         while(exit){
            exit = tempList.remove("");
         }
-
         br.close();
         fr.close();
-
-        System.out.println("File read");
-
+        // System.out.println("File read");
         return tempList;        
     }
     
